@@ -1,16 +1,2225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mini App</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AL-MOHANNADI Manpower CV System</title>
+
+  <style>
+    * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    html, body {
+      background-color: #0f172a !important;
+      color: #ffffff !important;
+      min-height: 100%;
+      width: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #0f172a;
+      z-index: 9999;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    .login-icon-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background-color: rgba(0, 122, 255, 0.15);
+      border: 1px solid rgba(0, 122, 255, 0.3);
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      margin: 0 auto 20px auto;
+    }
+    .login-icon-box svg { width: 30px; height: 30px; fill: #007aff; }
+    .login-title { font-size: 20px; font-weight: bold; color: #ffffff; margin-bottom: 6px; }
+    .login-sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; }
+    .login-input-group { margin-bottom: 16px; text-align: left; }
+    .login-input {
+      width: 100%;
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      color: #ffffff;
+      outline: none;
+      text-align: center;
+      letter-spacing: 4px;
+      font-weight: bold;
+    }
+    .login-input:focus { border-color: #007aff; }
+    .login-btn {
+      width: 100%;
+      background-color: #007aff;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .login-btn:active { background-color: #0056b3; }
+    .login-error { color: #f87171; font-size: 12px; margin-top: 12px; display: none; }
+    .shake {
+      -webkit-animation: shake 0.3s ease-in-out;
+      animation: shake 0.3s ease-in-out;
+    }
+    @-webkit-keyframes shake {
+      0%, 100% { -webkit-transform: translateX(0); }
+      20%, 60% { -webkit-transform: translateX(-8px); }
+      40%, 80% { -webkit-transform: translateX(8px); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .header-bar {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      padding: 12px 16px;
+    }
+    .header-inner { max-width: 1000px; margin: 0 auto; }
+    .header-top {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .logo-container {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      min-width: 0;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background-color: #007aff;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      margin-right: 10px;
+      -webkit-shrink: 0;
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 20px; height: 20px; fill: #ffffff; }
+    .title-main {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ffffff;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title-sub {
+      font-size: 10px;
+      color: #94a3b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .header-actions {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .badge-count {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 16px;
+    }
+    .btn-view-list {
+      background-color: #007aff;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-view-list:active { background-color: #0056b3; }
+    .btn-view-list .badge-list-count {
+      background-color: rgba(255,255,255,0.25);
+      border-radius: 12px;
+      padding: 0 6px;
+      margin-left: 4px;
+      font-size: 10px;
+    }
+
+    .search-wrap { position: relative; width: 100%; }
+    .search-input {
+      width: 100%;
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 14px 10px 38px;
+      font-size: 13px;
+      color: #ffffff;
+      outline: none;
+    }
+    .search-icon-svg {
+      position: absolute;
+      left: 12px;
+      top: 10px;
+      width: 16px;
+      height: 16px;
+      fill: #94a3b8;
+    }
+
+    .main-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px 12px 60px 12px;
+    }
+    .section-head {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      margin-top: 16px;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      margin-right: 8px;
+    }
+    .section-line { -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; height: 1px; background-color: #1e293b; }
+
+    .delete-main-container {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background-color: #1e293b;
+      border-radius: 10px;
+      border: 1px solid #334155;
+    }
+    .delete-main-btn {
+      background-color: #22c55e;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 6px;
+    }
+    .delete-main-btn:active { opacity: 0.7; }
+    .delete-main-btn.active { background-color: #ef4444; }
+    .delete-main-btn.active:active { background-color: #dc2626; }
+    .delete-main-status { color: #94a3b8; font-size: 12px; }
+    .delete-main-count { color: #ffffff; font-size: 12px; font-weight: 600; margin-left: auto; }
+
+    .folder-grid { width: 100%; font-size: 0; }
+    .folder-card-wrap {
+      display: inline-block;
+      vertical-align: top;
+      width: 100%;
+      padding-bottom: 10px;
+      font-size: 14px;
+    }
+    @media (min-width: 600px) {
+      .folder-card-wrap { width: 50%; padding-right: 6px; }
+      .folder-card-wrap:nth-child(even) { padding-right: 0; padding-left: 6px; }
+    }
+    @media (min-width: 900px) {
+      .folder-card-wrap { width: 33.333%; padding-right: 8px; padding-left: 0; }
+      .folder-card-wrap:nth-child(even) { padding-right: 8px; padding-left: 0; }
+    }
+
+    .folder-card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+    }
+    .folder-card:active { background-color: #334155; }
+    .card-left {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .folder-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background-color: rgba(0, 122, 255, 0.2);
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      margin-right: 10px;
+      -webkit-shrink: 0;
+      flex-shrink: 0;
+    }
+    .folder-avatar svg { width: 18px; height: 18px; fill: #007aff; }
+    .card-title {
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-sub { color: #94a3b8; font-size: 11px; margin-top: 1px; }
+    .num-pill {
+      background-color: #007aff;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 10px;
+      -webkit-shrink: 0;
+      flex-shrink: 0;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 1000;
+      background-color: #0f172a;
+      display: none;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+    }
+    .modal-nav {
+      min-height: 50px;
+      background-color: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 0 12px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .btn-back {
+      background-color: #334155;
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .modal-title {
+      font-weight: bold;
+      font-size: 14px;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 35%;
+    }
+    .modal-nav-right {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .btn-add-all {
+      background-color: #22c55e;
+      color: #ffffff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-add-all:active { background-color: #16a34a; }
+
+    .filter-bar {
+      background-color: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 6px 10px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .filter-select {
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 5px;
+      padding: 4px 20px 4px 6px;
+      font-size: 10px;
+      color: #ffffff;
+      outline: none;
+      cursor: pointer;
+      min-width: 50px;
+      max-width: 110px;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: right 5px top 50%;
+      background-size: 7px auto;
+      flex: 1 0 auto;
+    }
+    .filter-select:focus { border-color: #007aff; }
+    .filter-select option { background-color: #1e293b; color: #ffffff; }
+    .btn-clear-filters {
+      background-color: #334155;
+      color: #ffffff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .filter-count {
+      color: #94a3b8;
+      font-size: 10px;
+      margin-left: auto;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding-left: 4px;
+    }
+
+    .gallery-container {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px;
+      white-space: nowrap;
+      font-size: 0;
+    }
+    .cv-slide-box {
+      display: inline-block;
+      vertical-align: top;
+      width: 88%;
+      max-width: 550px;
+      height: 100%;
+      margin-right: 12px;
+      white-space: normal;
+      font-size: 13px;
+    }
+    .cv-image-frame {
+      position: relative;
+      width: 100%;
+      height: calc(100% - 55px);
+      min-height: 300px;
+      background-color: #000000;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      overflow: hidden;
+      text-align: center;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+    }
+    .cv-image-frame img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .tag-counter {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(0,0,0,0.85);
+      color: #ffffff;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 8px;
+      z-index: 10;
+    }
+    .btn-open-link {
+      position: absolute;
+      bottom: 8px;
+      left: 60px;
+      background: #007aff;
+      color: #ffffff;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      z-index: 10;
+    }
+
+    .cv-top-actions {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      z-index: 15;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      pointer-events: none;
+    }
+    .cv-top-actions > * { pointer-events: auto; }
+
+    .btn-add-top {
+      background-color: #22c55e;
+      color: #ffffff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      -webkit-box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .btn-add-top:active { background-color: #16a34a; }
+    .btn-add-top.added { background-color: #22c55e; color: #ffffff; }
+
+    .cv-footer {
+      margin-top: 6px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      min-height: 40px;
+    }
+    .cv-info {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      min-width: 0;
+      padding-right: 4px;
+    }
+    .cv-info-name {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cv-info-detail {
+      color: #94a3b8;
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .img-error-box { color: #94a3b8; font-size: 12px; text-align: center; padding: 16px; }
+
+    .list-modal-content {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+    .list-item {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+    }
+    .list-item-left {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      min-width: 0;
+    }
+    .list-item-name {
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .list-item-sub {
+      color: #94a3b8;
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-remove-item {
+      background-color: #ef4444;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      -webkit-shrink: 0;
+      flex-shrink: 0;
+      margin-left: 6px;
+      transition: all 0.2s;
+    }
+    .btn-remove-item:active { background-color: #dc2626; }
+    .btn-remove-item.deleting {
+      background-color: #6b7280;
+      cursor: wait;
+      opacity: 0.6;
+    }
+    .list-empty { text-align: center; color: #94a3b8; padding: 30px 16px; font-size: 14px; }
+    .list-actions {
+      padding: 12px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid #1e293b;
+      flex-shrink: 0;
+    }
+    .list-actions .btn-send {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      background-color: #22c55e;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .list-actions .btn-send:active { background-color: #16a34a; }
+    .list-actions .btn-clear {
+      background-color: #334155;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .list-actions .btn-clear:active { background-color: #475569; }
+
+    .phone-modal-content {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+      flex: 1;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .phone-box {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+    .phone-box .icon-big {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background-color: rgba(0, 122, 255, 0.15);
+      border: 1px solid rgba(0, 122, 255, 0.3);
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      margin: 0 auto 12px auto;
+    }
+    .phone-box .icon-big svg { width: 24px; height: 24px; fill: #007aff; }
+    .phone-box h3 { color: #ffffff; font-size: 16px; margin-bottom: 4px; }
+    .phone-box p { color: #94a3b8; font-size: 12px; margin-bottom: 16px; }
+    .phone-box input {
+      width: 100%;
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      color: #ffffff;
+      outline: none;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .phone-box input:focus { border-color: #007aff; }
+    .phone-box .btn-submit-phone {
+      width: 100%;
+      background-color: #007aff;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .phone-box .btn-submit-phone:active { background-color: #0056b3; }
+    .phone-box .btn-close-phone {
+      background-color: transparent;
+      color: #94a3b8;
+      border: none;
+      font-size: 12px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .phone-box .btn-close-phone:active { color: #ffffff; }
+    .phone-success { color: #22c55e; font-size: 13px; margin-top: 10px; display: none; }
+
+    .progress-container {
+      margin: 12px 0;
+      width: 100%;
+      display: none;
+    }
+    .progress-container.active { display: block; }
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background-color: #334155;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .progress-percentage { color: #ffffff; font-weight: bold; }
+    .progress-status { color: #e2e8f0; font-size: 13px; margin-top: 4px; }
+
+    .toast-notification {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
+      background-color: #22c55e;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
+      z-index: 99999;
+      font-weight: bold;
+      font-size: 14px;
+      max-width: 90%;
+      text-align: center;
+      -webkit-transition: opacity 0.3s ease, -webkit-transform 0.3s ease;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      -webkit-transform: translateX(-50%) translateY(20px);
+      transform: translateX(-50%) translateY(20px);
+      pointer-events: none;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .toast-notification.show {
+      opacity: 1;
+      -webkit-transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+    .toast-notification.error { background-color: #ef4444; }
+
+    .hidden { display: none !important; }
+    .status-msg { text-align: center; padding: 40px 16px; color: #94a3b8; font-size: 13px; }
+  </style>
 </head>
 <body>
-<h1>Hello, Telegram!</h1>
-<button onclick="sayHello()">Click Me</button>
 
-<script src="script.js"></script>
+  <!-- LOGIN -->
+  <div id="loginOverlay" class="login-overlay">
+    <div id="loginCard" class="login-card">
+      <div class="login-icon-box">
+        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      </div>
+      <div class="login-title">Restricted Access</div>
+      <div class="login-sub">Enter passcode to access CV Portal</div>
+      
+      <form onsubmit="handleLogin(event)">
+        <div class="login-input-group">
+          <input type="password" id="passInput" class="login-input" placeholder="••••" maxlength="10" autofocus />
+        </div>
+        <button type="submit" class="login-btn">Unlock Portal</button>
+      </form>
+      
+      <div id="loginError" class="login-error">Incorrect passcode. Try again.</div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toastNotification" class="toast-notification">
+    <span id="toastMessage"></span>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header-bar">
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="logo-container">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+          </div>
+          <div>
+            <div class="title-main">AL-MOHANNADI Manpower CV System</div>
+            <div class="title-sub">Candidate CV Viewer Portal</div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <div id="totalBadge" class="badge-count hidden">
+            <span id="totalCount">0</span> CVs
+          </div>
+          <button onclick="openListModal()" class="btn-view-list">
+            📋 <span id="listCountBadge" class="badge-list-count">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <svg class="search-icon-svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" id="searchInput" onkeyup="filterFolders()" oninput="filterFolders()" placeholder="Search folders..." class="search-input" />
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div id="loadingState" class="status-msg">Loading Candidates & Data...</div>
+    <div id="errorState" class="status-msg hidden" style="color: #f87171;">
+      <span id="errorText">Error loading data.</span>
+    </div>
+    <div id="emptyState" class="status-msg hidden">No folders match your search query.</div>
+
+    <div id="deleteMainContainer" class="delete-main-container hidden">
+      <button id="deleteMainBtn" class="delete-main-btn" onclick="toggleDeleteMain()">
+        🗑️ Delete CVs
+      </button>
+      <span id="deleteMainStatus" class="delete-main-status">Click to activate</span>
+      <span id="deleteMainCount" class="delete-main-count">0 selected</span>
+    </div>
+
+    <div id="sectionsContainer" class="hidden">
+      <div id="sec-housemaid">
+        <div class="section-head">
+          <span class="section-title">Housemaid Types</span>
+          <div class="section-line"></div>
+        </div>
+        <div id="grid-housemaid" class="folder-grid"></div>
+      </div>
+
+      <div id="sec-jobs">
+        <div class="section-head">
+          <span class="section-title">Job Roles</span>
+          <div class="section-line"></div>
+        </div>
+        <div id="grid-jobs" class="folder-grid"></div>
+      </div>
+
+      <div id="sec-countries">
+        <div class="section-head">
+          <span class="section-title">Countries</span>
+          <div class="section-line"></div>
+        </div>
+        <div id="grid-countries" class="folder-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CV MODAL -->
+  <div id="cvModal" class="modal-overlay">
+    <div class="modal-nav">
+      <button onclick="closeModal()" class="btn-back">← Back</button>
+      <div id="modalTitle" class="modal-title"></div>
+      <div class="modal-nav-right">
+        <button onclick="addAllFromFolder()" class="btn-add-all">+ Add All</button>
+        <div id="modalBadge" class="num-pill">0</div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <select id="filterJob" class="filter-select" onchange="applyModalFilters()">
+        <option value="">💼 Jobs</option>
+      </select>
+      <select id="filterCountry" class="filter-select" onchange="applyModalFilters()">
+        <option value="">🌍 Country</option>
+      </select>
+      <select id="filterReligion" class="filter-select" onchange="applyModalFilters()">
+        <option value="">⛪ Religion</option>
+      </select>
+      <select id="filterGender" class="filter-select" onchange="applyModalFilters()">
+        <option value="">👤 Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <select id="filterExperience" class="filter-select" onchange="applyModalFilters()">
+        <option value="">📅 Exp</option>
+        <option value="0">0 (First Timer)</option>
+        <option value="1-5">1-5 Yrs</option>
+        <option value="5-10">5-10 Yrs</option>
+        <option value="10+">10+ Yrs</option>
+      </select>
+      <select id="filterSalary" class="filter-select" onchange="applyModalFilters()">
+        <option value="">💰 Salary</option>
+        <option value="0-1000">Below 1000</option>
+        <option value="1000-2000">1000-2000</option>
+        <option value="2000-3000">2000-3000</option>
+        <option value="3000+">3000+</option>
+      </select>
+      <select id="filterWorkerType" class="filter-select" onchange="applyModalFilters()">
+        <option value="">👷 Worker Type</option>
+        <option value="Recruitment Workers">Recruitment</option>
+        <option value="Returned Housemaids">Returned</option>
+      </select>
+      <button onclick="clearModalFilters()" class="btn-clear-filters">✕</button>
+      <span id="filterCount" class="filter-count"></span>
+    </div>
+
+    <div id="slidesViewport" class="gallery-container"></div>
+  </div>
+
+  <!-- LIST MODAL -->
+  <div id="listModal" class="modal-overlay">
+    <div class="modal-nav">
+      <button onclick="closeListModal()" class="btn-back">← Back</button>
+      <div class="modal-title">📋 Added CVs</div>
+      <div id="listModalBadge" class="num-pill">0</div>
+    </div>
+    <div id="listModalBody" class="list-modal-content"></div>
+    <div class="list-actions">
+      <button onclick="clearAllList()" class="btn-clear">Clear All</button>
+      <button onclick="openPhoneModal()" class="btn-send">📤 Send CVs</button>
+    </div>
+  </div>
+
+  <!-- PHONE MODAL -->
+  <div id="phoneModal" class="modal-overlay">
+    <div class="modal-nav">
+      <button onclick="closePhoneModal()" class="btn-back">← Back</button>
+      <div class="modal-title">📤 Share CVs</div>
+      <div style="width:40px;"></div>
+    </div>
+    <div class="phone-modal-content">
+      <div class="phone-box">
+        <div class="icon-big">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </div>
+        <h3>Enter Phone Number</h3>
+        <p>We'll send the selected CVs to your WhatsApp</p>
+        <input type="tel" id="phoneInput" placeholder="974 1234 5678" maxlength="20" onfocus="handlePhoneFocus()" oninput="handlePhoneInput()" />
+        
+        <div id="progressContainer" class="progress-container">
+          <div class="progress-bar-track">
+            <div id="progressBarFill" class="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+          <div class="progress-text">
+            <span id="progressStatus" class="progress-status">Initializing...</span>
+            <span id="progressPercentage" class="progress-percentage">0%</span>
+          </div>
+        </div>
+        
+        <button onclick="submitPhone()" class="btn-submit-phone">📤 Send Now</button>
+        <div id="phoneSuccess" class="phone-success">✅ Sending...</div>
+        <button onclick="closePhoneModal()" class="btn-close-phone">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    // LOGIN
+    var CORRECT_PASSWORD = "1978";
+    var DELETE_PASSWORD = "1810";
+
+    function handleLogin(e) {
+      if (e) e.preventDefault();
+      var input = document.getElementById("passInput").value;
+      var err = document.getElementById("loginError");
+      var card = document.getElementById("loginCard");
+
+      if (input === CORRECT_PASSWORD) {
+        sessionStorage.setItem("zod_unlocked", "true");
+        document.getElementById("loginOverlay").style.display = "none";
+        initData();
+      } else {
+        err.style.display = "block";
+        card.className = "login-card shake";
+        setTimeout(function() { card.className = "login-card"; }, 300);
+      }
+    }
+
+    function checkAuth() {
+      if (sessionStorage.getItem("zod_unlocked") === "true") {
+        document.getElementById("loginOverlay").style.display = "none";
+        initData();
+      }
+    }
+
+    // TOAST
+    function showToast(message, isError) {
+      var toast = document.getElementById("toastNotification");
+      var msg = document.getElementById("toastMessage");
+      msg.innerText = message;
+      toast.className = "toast-notification";
+      if (isError) toast.classList.add("error");
+      if (window.toastTimeout) clearTimeout(window.toastTimeout);
+      setTimeout(function() { toast.classList.add("show"); }, 50);
+      window.toastTimeout = setTimeout(function() { toast.classList.remove("show"); }, 4000);
+    }
+
+    // SUPABASE
+    var SUPABASE_URL = "https://vgaodijzdlevhyrxvswk.supabase.co";
+    var SUPABASE_KEY = "sb_publishable_u69mNDDb7JD0VFQmYXG0jQ_8LGCYE5e";
+
+    // LABELS
+    var JOB_LABELS = {
+      "House Maid": "Housemaid",
+      "Housemaid": "Housemaid",
+      "Baby sitting": "Baby Sitter",
+      "Babysitter": "Baby Sitter",
+      "Baby Sitter": "Baby Sitter",
+      "Nanny": "Baby Sitter",
+      "Nannie": "Baby Sitter",
+      "Domestic Worker": "Domestic Worker",
+      "Driver": "Driver",
+      "Cook": "Cook",
+      "Nurse": "Nurse"
+    };
+
+    var RELIGION_LABELS = {
+      "CHRISTIAN": "Christian",
+      "CHRISTAN": "Christian",
+      "CHRISTINE": "Christian",
+      "CHRISTIN": "Christian",
+      "CHRSTIAN": "Christian",
+      "CHRSTIN": "Christian",
+      "CHRISSTIAN": "Christian",
+      "Catholic": "Christian",
+      "CATHOLIC": "Christian",
+      "R.CATHOLIC": "Christian",
+      "NON MUSLIM": "Christian",
+      "NON NMUSLIM": "Christian",
+      "NON- MUSLIM": "Christian",
+      "NON-MUSLIM": "Christian",
+      "NON- ISLAM": "Christian",
+      "NON-MOSLEM": "Christian",
+      "NONMUSLIM": "Christian",
+      "MUSLIM": "Muslim",
+      "MUSILM": "Muslim",
+      "MOSLEM": "Muslim",
+      "ISLAM": "Muslim",
+      "MORMONS": "Muslim",
+      "TAMIL": "Tamil"
+    };
+
+    var SVG_FOLDER = '<svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>';
+    var SVG_BRIEFCASE = '<svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>';
+    var SVG_GLOBE = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>';
+
+    var talents = [];
+    var selectedCVs = [];
+    var currentFolderTalents = [];
+    var deleteModeActive = false;
+    var filteredCVs = [];
+
+    // INIT
+    function initData() {
+      var xhr = new XMLHttpRequest();
+      var reqUrl = SUPABASE_URL + "/rest/v1/talents?select=*&order=created_at.desc";
+      xhr.open("GET", reqUrl, true);
+      xhr.setRequestHeader("apikey", SUPABASE_KEY);
+      xhr.setRequestHeader("Authorization", "Bearer " + SUPABASE_KEY);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              var responseData = JSON.parse(xhr.responseText);
+              talents = responseData || [];
+              document.getElementById("loadingState").className += " hidden";
+              document.getElementById("totalCount").innerText = talents.length;
+              document.getElementById("totalBadge").className = "badge-count";
+              document.getElementById("sectionsContainer").className = "";
+              document.getElementById("deleteMainContainer").className = "delete-main-container";
+              filterFolders();
+            } catch(e) {
+              showError("JSON Parse Error: " + e.message);
+            }
+          } else {
+            showError("Database Error: Code " + xhr.status);
+          }
+        }
+      };
+      xhr.onerror = function() { showError("Connection Failed."); };
+      xhr.send();
+    }
+
+    function showError(msg) {
+      document.getElementById("loadingState").className += " hidden";
+      document.getElementById("errorText").innerText = msg;
+      document.getElementById("errorState").className = "status-msg";
+    }
+
+    function normalizeJob(raw) { return JOB_LABELS[raw] || raw; }
+    function normalizeReligion(raw) { return RELIGION_LABELS[raw] || raw; }
+
+    // ========== 🔥 NEW: Delete File from Supabase Storage ==========
+    function deleteFileFromStorage(fileUrl) {
+      return new Promise(function(resolve, reject) {
+        if (!fileUrl || fileUrl === "") {
+          resolve(); // No file to delete
+          return;
+        }
+
+        // Check if it's a Supabase Storage URL
+        var storageMatch = fileUrl.match(/\/storage\/v1\/object\/public\/([^\/]+)\/(.+)/);
+        if (!storageMatch) {
+          console.log("⚠️ Not a Supabase Storage URL, skipping:", fileUrl);
+          resolve(); // Not a storage URL, skip
+          return;
+        }
+
+        var bucketName = storageMatch[1];
+        var filePath = storageMatch[2];
+        console.log("🗑️ Deleting from Storage - Bucket:", bucketName, "Path:", filePath);
+
+        var url = SUPABASE_URL + "/storage/v1/object/" + bucketName + "/" + encodeURIComponent(filePath);
+        console.log("📡 Storage DELETE URL:", url);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", url, true);
+        xhr.setRequestHeader("apikey", SUPABASE_KEY);
+        xhr.setRequestHeader("Authorization", "Bearer " + SUPABASE_KEY);
+        
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            // 200, 204, or 404 (file already deleted) are all acceptable
+            if (xhr.status === 200 || xhr.status === 204 || xhr.status === 404) {
+              console.log("✅ Storage file deleted:", filePath);
+              resolve();
+            } else {
+              console.warn("⚠️ Storage delete warning:", xhr.status, xhr.responseText);
+              // Don't reject - continue with database deletion even if storage fails
+              resolve();
+            }
+          }
+        };
+        
+        xhr.onerror = function() {
+          console.warn("⚠️ Storage delete network error - continuing");
+          resolve(); // Continue even if storage fails
+        };
+        
+        xhr.send();
+      });
+    }
+
+    // ========== 🔥 NEW: Delete all files associated with a CV ==========
+    function deleteCVFiles(cv) {
+      var fileUrls = [];
+      
+      // Check all possible file fields
+      var fields = ['cv', 'cv_url', 'cvUrl', 'photo', 'image', 'profile_pic'];
+      for (var i = 0; i < fields.length; i++) {
+        var val = cv[fields[i]];
+        if (val && typeof val === 'string' && val.trim() !== '') {
+          fileUrls.push(val.trim());
+        }
+      }
+      
+      if (fileUrls.length === 0) {
+        return Promise.resolve();
+      }
+      
+      console.log("📁 Deleting", fileUrls.length, "file(s) for CV:", cv.id);
+      
+      var promises = fileUrls.map(function(url) {
+        return deleteFileFromStorage(url);
+      });
+      
+      return Promise.allSettled(promises);
+    }
+
+    // ========== DELETE FROM SUPABASE ==========
+    function deleteCVFromSupabase(cvId) {
+      return new Promise(function(resolve, reject) {
+        console.log("🗑️ Attempting to delete database record with ID:", cvId);
+        
+        var url = SUPABASE_URL + "/rest/v1/talents?id=eq." + cvId;
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("DELETE", url, true);
+        xhr.setRequestHeader("apikey", SUPABASE_KEY);
+        xhr.setRequestHeader("Authorization", "Bearer " + SUPABASE_KEY);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Prefer", "return=minimal");
+        
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200 || xhr.status === 204) {
+              console.log("✅ Database record deleted for ID:", cvId);
+              resolve();
+            } else {
+              console.error("❌ Database delete failed. Status:", xhr.status, "Response:", xhr.responseText);
+              reject(new Error("Failed to delete from Supabase. Status: " + xhr.status));
+            }
+          }
+        };
+        
+        xhr.onerror = function() {
+          reject(new Error("Network error while deleting from Supabase"));
+        };
+        
+        xhr.send();
+      });
+    }
+
+    // ========== COMPLETE DELETE FUNCTION ==========
+    function deleteCVComplete(cv, index, btnElement) {
+      var cvId = cv.id;
+      var cvName = cv.name || cv.candidate_name || 'Unnamed Candidate';
+      
+      console.log("🗑️ Starting complete deletion for:", cvName, "(ID:", cvId + ")");
+      
+      // Step 1: Delete files from Storage
+      deleteCVFiles(cv)
+        .then(function() {
+          console.log("📁 Files deletion completed (or skipped)");
+          // Step 2: Delete database record
+          return deleteCVFromSupabase(cvId);
+        })
+        .then(function() {
+          console.log("✅ Complete deletion successful for:", cvName);
+          
+          // Remove from all arrays
+          // From selectedCVs
+          if (index !== undefined && index !== null) {
+            selectedCVs.splice(index, 1);
+          } else {
+            // Find and remove by ID
+            for (var i = selectedCVs.length - 1; i >= 0; i--) {
+              if (selectedCVs[i].id == cvId) {
+                selectedCVs.splice(i, 1);
+                break;
+              }
+            }
+          }
+          
+          // From talents
+          for (var i = talents.length - 1; i >= 0; i--) {
+            if (talents[i].id == cvId) {
+              talents.splice(i, 1);
+              break;
+            }
+          }
+          
+          // From currentFolderTalents
+          for (var i = currentFolderTalents.length - 1; i >= 0; i--) {
+            if (currentFolderTalents[i].id == cvId) {
+              currentFolderTalents.splice(i, 1);
+              break;
+            }
+          }
+          
+          // Update UI
+          renderListModal();
+          updateListBadge();
+          updateDeleteMainCount();
+          document.getElementById("totalCount").innerText = talents.length;
+          
+          // Refresh modal if open
+          var modal = document.getElementById("cvModal");
+          if (modal.style.display === "flex") {
+            applyModalFilters();
+            document.getElementById("modalBadge").innerText = currentFolderTalents.length + " CVs";
+          }
+          
+          filterFolders();
+          showToast("✅ Deleted: " + cvName + " (Database + Files)");
+        })
+        .catch(function(error) {
+          console.error("❌ Delete failed:", error);
+          showToast("❌ Failed to delete: " + error.message, true);
+          if (btnElement) {
+            btnElement.classList.remove('deleting');
+            btnElement.innerText = '✕';
+            btnElement.disabled = false;
+          }
+        });
+    }
+
+    // ========== DELETE MAIN (BULK) ==========
+    function toggleDeleteMain() {
+      var btn = document.getElementById("deleteMainBtn");
+      var status = document.getElementById("deleteMainStatus");
+
+      if (selectedCVs.length === 0) {
+        showToast("No CVs in your list to delete!", true);
+        return;
+      }
+
+      if (!deleteModeActive) {
+        var pwd = prompt("Enter Delete Mode Password:");
+        if (pwd === null) return;
+        if (pwd !== DELETE_PASSWORD) {
+          showToast("Incorrect password!", true);
+          return;
+        }
+        deleteModeActive = true;
+        btn.classList.add("active");
+        btn.innerHTML = "🗑️ Delete Selected";
+        status.innerText = "⚠️ Click to delete " + selectedCVs.length + " CV(s)";
+        status.style.color = "#ef4444";
+        showToast("Delete Mode ON - Click again to delete all " + selectedCVs.length + " CV(s)!");
+      } else {
+        if (!confirm("⚠️ Are you sure you want to permanently delete " + selectedCVs.length + " CV(s) from Supabase (Database + Files)? This cannot be undone!")) {
+          return;
+        }
+        deleteAllSelectedCVs();
+      }
+    }
+
+    function deleteAllSelectedCVs() {
+      var cvsToDelete = selectedCVs.slice(); // Copy array
+      var total = cvsToDelete.length;
+      var deleted = 0;
+      var failed = 0;
+
+      function processNext(index) {
+        if (index >= cvsToDelete.length) {
+          // All done
+          selectedCVs = [];
+          updateListBadge();
+          document.getElementById("totalCount").innerText = talents.length;
+          
+          deleteModeActive = false;
+          var btn = document.getElementById("deleteMainBtn");
+          btn.classList.remove("active");
+          btn.innerHTML = "🗑️ Delete CVs";
+          document.getElementById("deleteMainStatus").innerText = "Click to activate";
+          document.getElementById("deleteMainStatus").style.color = "#94a3b8";
+          document.getElementById("deleteMainCount").innerText = "0 selected";
+          
+          filterFolders();
+          
+          var modal = document.getElementById("cvModal");
+          if (modal.style.display === "flex") {
+            applyModalFilters();
+            document.getElementById("modalBadge").innerText = currentFolderTalents.length + " CVs";
+          }
+          
+          if (failed > 0) {
+            showToast("⚠️ " + deleted + " deleted, " + failed + " failed!", true);
+          } else {
+            showToast("✅ " + deleted + " CV(s) deleted successfully from Supabase (Database + Files)!");
+          }
+          return;
+        }
+
+        var cv = cvsToDelete[index];
+        console.log("🗑️ Processing bulk delete:", index + 1 + "/" + total, cv.name || cv.candidate_name || 'Unnamed');
+
+        // Delete files then database
+        deleteCVFiles(cv)
+          .then(function() {
+            return deleteCVFromSupabase(cv.id);
+          })
+          .then(function() {
+            // Remove from talents
+            for (var i = talents.length - 1; i >= 0; i--) {
+              if (talents[i].id == cv.id) {
+                talents.splice(i, 1);
+                break;
+              }
+            }
+            // Remove from currentFolderTalents
+            for (var i = currentFolderTalents.length - 1; i >= 0; i--) {
+              if (currentFolderTalents[i].id == cv.id) {
+                currentFolderTalents.splice(i, 1);
+                break;
+              }
+            }
+            deleted++;
+            showToast("✅ Deleted (" + (index + 1) + "/" + total + "): " + (cv.name || cv.candidate_name || 'Unnamed'));
+            processNext(index + 1);
+          })
+          .catch(function(error) {
+            console.error("❌ Failed to delete:", cv.id, error);
+            failed++;
+            // Continue with next
+            processNext(index + 1);
+          });
+      }
+
+      processNext(0);
+    }
+
+    function updateDeleteMainCount() {
+      var count = document.getElementById("deleteMainCount");
+      count.innerText = selectedCVs.length + " selected";
+    }
+
+    // ========== FILTER FOLDERS ==========
+    function filterFolders() {
+      var q = document.getElementById("searchInput").value.toLowerCase().trim();
+
+      var housemaids = [
+        {
+          label: "Recruitment Housemaids",
+          icon: SVG_FOLDER,
+          talents: talents.filter(function(t) {
+            var wType = t.workerType || t.workertype || t.worker_type || "";
+            return wType === "Recruitment Workers";
+          })
+        },
+        {
+          label: "Returned Housemaids",
+          icon: SVG_FOLDER,
+          talents: talents.filter(function(t) {
+            var wType = t.workerType || t.workertype || t.worker_type || "";
+            return wType === "Returned Housemaids";
+          })
+        }
+      ];
+
+      var jobMap = {};
+      for (var i = 0; i < talents.length; i++) {
+        var job = talents[i].job;
+        if (job) {
+          var normalized = normalizeJob(job);
+          if (!jobMap[normalized]) jobMap[normalized] = [];
+          jobMap[normalized].push(job);
+        }
+      }
+
+      var jobs = [];
+      for (var key in jobMap) {
+        jobs.push({
+          label: key,
+          icon: SVG_BRIEFCASE,
+          talents: talents.filter(function(t) { return jobMap[key].indexOf(t.job) !== -1; })
+        });
+      }
+
+      var countries = [];
+      var countryMap = {};
+      for (var c = 0; c < talents.length; c++) {
+        var country = talents[c].country;
+        if (country && !countryMap[country]) {
+          countryMap[country] = true;
+          countries.push(country);
+        }
+      }
+      countries.sort();
+      var countryFolders = countries.map(function(c) {
+        return {
+          label: c,
+          icon: SVG_GLOBE,
+          talents: talents.filter(function(t) { return t.country === c; })
+        };
+      });
+
+      var sections = [
+        { id: "housemaid", data: housemaids },
+        { id: "jobs", data: jobs },
+        { id: "countries", data: countryFolders }
+      ];
+
+      var totalFound = 0;
+
+      for (var s = 0; s < sections.length; s++) {
+        var sec = sections[s];
+        var grid = document.getElementById("grid-" + sec.id);
+        var secDiv = document.getElementById("sec-" + sec.id);
+        grid.innerHTML = "";
+
+        var matches = sec.data.filter(function(item) {
+          return item.label.toLowerCase().indexOf(q) !== -1;
+        });
+
+        if (matches.length > 0) {
+          secDiv.className = "";
+          totalFound += matches.length;
+
+          for (var k = 0; k < matches.length; k++) {
+            var item = matches[k];
+            var wrap = document.createElement("div");
+            wrap.className = "folder-card-wrap";
+
+            var card = document.createElement("div");
+            card.className = "folder-card";
+            card.onclick = (function(folderObj) {
+              return function() { openModal(folderObj); };
+            })(item);
+
+            card.innerHTML =
+              '<div class="card-left">' +
+                '<div class="folder-avatar">' + item.icon + '</div>' +
+                '<div>' +
+                  '<div class="card-title">' + item.label + '</div>' +
+                  '<div class="card-sub">' + item.talents.length + ' CVs Available</div>' +
+                '</div>' +
+              '</div>' +
+              '<div class="num-pill">' + item.talents.length + '</div>';
+
+            wrap.appendChild(card);
+            grid.appendChild(wrap);
+          }
+        } else {
+          secDiv.className = "hidden";
+        }
+      }
+
+      var empty = document.getElementById("emptyState");
+      if (totalFound === 0 && q !== "") {
+        empty.className = "status-msg";
+      } else {
+        empty.className = "status-msg hidden";
+      }
+    }
+
+    // MODAL FUNCTIONS
+    function openModal(folder) {
+      currentFolderTalents = folder.talents;
+      filteredCVs = [];
+      document.getElementById("modalTitle").innerText = folder.label;
+      document.getElementById("modalBadge").innerText = folder.talents.length + " CVs";
+
+      populateFilterOptions('filterJob', 'job', normalizeJob);
+      populateFilterOptions('filterCountry', 'country', function(v) { return v; });
+      populateFilterOptions('filterReligion', 'religion', normalizeReligion);
+      
+      document.getElementById('filterWorkerType').value = '';
+      document.getElementById('filterGender').value = '';
+      document.getElementById('filterExperience').value = '';
+      document.getElementById('filterSalary').value = '';
+
+      applyModalFilters();
+
+      var modal = document.getElementById("cvModal");
+      modal.style.display = "-webkit-flex";
+      modal.style.display = "flex";
+    }
+
+    function populateFilterOptions(selectId, key, normalizeFn) {
+      var select = document.getElementById(selectId);
+      var currentVal = select.value;
+      var defaultLabel = select.options[0] ? select.options[0].text : 'All';
+      select.innerHTML = '<option value="">' + defaultLabel + '</option>';
+
+      var uniqueValues = {};
+      var seenValues = {};
+      
+      for (var i = 0; i < currentFolderTalents.length; i++) {
+        var rawVal = currentFolderTalents[i][key];
+        if (rawVal && typeof rawVal === 'string' && rawVal.trim() !== '') {
+          var normVal = normalizeFn ? normalizeFn(rawVal.trim()) : rawVal.trim();
+          var lowerKey = normVal ? normVal.toLowerCase() : '';
+          if (normVal && !seenValues[lowerKey]) {
+            seenValues[lowerKey] = true;
+            uniqueValues[normVal] = true;
+          }
+        }
+      }
+      
+      var sorted = Object.keys(uniqueValues).sort(function(a, b) {
+        return a.localeCompare(b);
+      });
+      
+      for (var j = 0; j < sorted.length; j++) {
+        var option = document.createElement('option');
+        option.value = sorted[j];
+        option.textContent = sorted[j];
+        select.appendChild(option);
+      }
+      
+      if (currentVal) select.value = currentVal;
+    }
+
+    function applyModalFilters() {
+      var job = document.getElementById('filterJob').value;
+      var country = document.getElementById('filterCountry').value;
+      var religion = document.getElementById('filterReligion').value;
+      var gender = document.getElementById('filterGender').value;
+      var expRange = document.getElementById('filterExperience').value;
+      var salaryRange = document.getElementById('filterSalary').value;
+      var workerType = document.getElementById('filterWorkerType').value;
+
+      var filtered = currentFolderTalents.filter(function(c) {
+        if (job) {
+          var normJob = normalizeJob(c.job);
+          if (normJob !== job) return false;
+        }
+        if (country && (c.country || '').trim() !== country) return false;
+        if (religion) {
+          var normReligion = normalizeReligion(c.religion);
+          if (normReligion !== religion) return false;
+        }
+        if (gender) {
+          var cGender = c.gender || c.sex || '';
+          if (cGender.trim() !== gender) return false;
+        }
+        if (expRange) {
+          var expVal = c.experience || c.exp || '0';
+          var num = parseFloat(expVal);
+          if (isNaN(num)) num = 0;
+          if (expRange === '0') {
+            if (num !== 0) return false;
+          } else {
+            var parts = expRange.split('-');
+            if (expRange === '10+') {
+              if (num < 10) return false;
+            } else {
+              var min = parseFloat(parts[0]);
+              var max = parseFloat(parts[1]);
+              if (num < min || num > max) return false;
+            }
+          }
+        }
+        if (salaryRange) {
+          var salVal = c.salary || c.expected_salary || '0';
+          var salNum = parseFloat(salVal);
+          if (isNaN(salNum)) salNum = 0;
+          var parts2 = salaryRange.split('-');
+          if (salaryRange === '3000+') {
+            if (salNum < 3000) return false;
+          } else {
+            var min2 = parseFloat(parts2[0]);
+            var max2 = parseFloat(parts2[1]);
+            if (salNum < min2 || salNum > max2) return false;
+          }
+        }
+        if (workerType) {
+          var wType = c.workerType || c.workertype || c.worker_type || "";
+          if (wType !== workerType) return false;
+        }
+        return true;
+      });
+
+      filteredCVs = filtered;
+      
+      renderSlides(filtered);
+      document.getElementById('filterCount').innerText = filtered.length + ' / ' + currentFolderTalents.length + ' shown';
+    }
+
+    function clearModalFilters() {
+      document.getElementById('filterJob').value = '';
+      document.getElementById('filterCountry').value = '';
+      document.getElementById('filterReligion').value = '';
+      document.getElementById('filterGender').value = '';
+      document.getElementById('filterExperience').value = '';
+      document.getElementById('filterSalary').value = '';
+      document.getElementById('filterWorkerType').value = '';
+      applyModalFilters();
+    }
+
+    function renderSlides(talentsToShow) {
+      var vp = document.getElementById("slidesViewport");
+      vp.innerHTML = "";
+
+      if (talentsToShow.length === 0) {
+        vp.innerHTML = '<div class="status-msg">No CVs match the selected filters.</div>';
+        return;
+      }
+
+      for (var i = 0; i < talentsToShow.length; i++) {
+        var c = talentsToShow[i];
+        var cvUrl = c.cv || c.cv_url || c.cvUrl || "";
+
+        var slide = document.createElement("div");
+        slide.className = "cv-slide-box";
+
+        var imgHtml = "";
+        var linkHtml = "";
+
+        if (cvUrl !== "") {
+          imgHtml = '<img src="' + cvUrl + '" alt="CV" onerror="this.onerror=null; this.parentNode.innerHTML=\'<div class=\\\'img-error-box\\\'>Unable to display image preview.<br><br><a href=\\\'' + cvUrl + '\\\' target=\\\'_blank\\\' style=\\\'color:#007aff; font-weight:bold;\\\'>Click here to view original CV</a></div>\';" />';
+          linkHtml = '<a href="' + cvUrl + '" target="_blank" class="btn-open-link">Open Original</a>';
+        } else {
+          imgHtml = '<div class="img-error-box">No CV Image URL attached</div>';
+        }
+
+        var nameText = c.name || c.candidate_name || 'Unnamed Candidate';
+        var jobText = c.job || c.job_role || 'N/A';
+        var expText = c.experience || c.exp || 'N/A';
+        var countryText = c.country || 'N/A';
+
+        var isAdded = selectedCVs.some(function(item) { return item.id === c.id; });
+
+        slide.innerHTML =
+          '<div class="cv-image-frame">' +
+            imgHtml +
+            '<span class="tag-counter">' + (i + 1) + ' / ' + talentsToShow.length + '</span>' +
+            linkHtml +
+            '<div class="cv-top-actions">' +
+              '<button class="btn-add-top' + (isAdded ? ' added' : '') + '" onclick="toggleAddCV(\'' + c.id + '\', this)">' +
+                (isAdded ? '✓ Added' : '+ Add') +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cv-footer">' +
+            '<div class="cv-info">' +
+              '<div class="cv-info-name">' + nameText + '</div>' +
+              '<div class="cv-info-detail">' + jobText + ' • Exp: ' + expText + ' • ' + countryText + '</div>' +
+            '</div>' +
+          '</div>';
+
+        slide.dataset.id = c.id;
+        vp.appendChild(slide);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("cvModal").style.display = "none";
+    }
+
+    function toggleAddCV(cvId, btn) {
+      var cv = null;
+      for (var i = 0; i < currentFolderTalents.length; i++) {
+        if (currentFolderTalents[i].id == cvId) {
+          cv = currentFolderTalents[i];
+          break;
+        }
+      }
+      if (!cv) return;
+
+      var existingIndex = selectedCVs.findIndex(function(item) { return item.id === cv.id; });
+
+      if (existingIndex >= 0) {
+        selectedCVs.splice(existingIndex, 1);
+        btn.className = "btn-add-top";
+        btn.innerText = "+ Add";
+      } else {
+        selectedCVs.push(cv);
+        btn.className = "btn-add-top added";
+        btn.innerText = "✓ Added";
+      }
+
+      updateListBadge();
+      document.getElementById("modalBadge").innerText = currentFolderTalents.length + " CVs";
+      updateDeleteMainCount();
+    }
+
+    function addAllFromFolder() {
+      var cvsToAdd = filteredCVs.length > 0 ? filteredCVs : currentFolderTalents;
+      
+      if (cvsToAdd.length === 0) {
+        showToast("No CVs to add!", true);
+        return;
+      }
+
+      var addedCount = 0;
+      for (var i = 0; i < cvsToAdd.length; i++) {
+        var cv = cvsToAdd[i];
+        var existingIndex = selectedCVs.findIndex(function(item) { return item.id === cv.id; });
+        if (existingIndex === -1) {
+          selectedCVs.push(cv);
+          addedCount++;
+        }
+      }
+
+      var allAddBtns = document.querySelectorAll(".btn-add-top");
+      for (var j = 0; j < allAddBtns.length; j++) {
+        var btn = allAddBtns[j];
+        var slide = btn.closest(".cv-slide-box");
+        if (slide) {
+          var cvId = slide.dataset.id;
+          var isAdded = selectedCVs.some(function(item) { return item.id == cvId; });
+          if (isAdded) {
+            btn.className = "btn-add-top added";
+            btn.innerText = "✓ Added";
+          }
+        }
+      }
+
+      updateListBadge();
+      document.getElementById("modalBadge").innerText = currentFolderTalents.length + " CVs";
+      updateDeleteMainCount();
+      
+      showToast(addedCount + " CV(s) added to list!");
+    }
+
+    function updateListBadge() {
+      document.getElementById("listCountBadge").innerText = selectedCVs.length;
+      updateDeleteMainCount();
+    }
+
+    // ========== LIST MODAL ==========
+    function openListModal() {
+      renderListModal();
+      var modal = document.getElementById("listModal");
+      modal.style.display = "-webkit-flex";
+      modal.style.display = "flex";
+    }
+
+    function closeListModal() {
+      document.getElementById("listModal").style.display = "none";
+    }
+
+    function renderListModal() {
+      var body = document.getElementById("listModalBody");
+      var badge = document.getElementById("listModalBadge");
+      badge.innerText = selectedCVs.length;
+
+      if (selectedCVs.length === 0) {
+        body.innerHTML = '<div class="list-empty">📭 No CVs added yet.<br>Browse and tap "+ Add" on each CV.</div>';
+        return;
+      }
+
+      var html = "";
+      for (var i = 0; i < selectedCVs.length; i++) {
+        var c = selectedCVs[i];
+        var nameText = c.name || c.candidate_name || 'Unnamed Candidate';
+        var jobText = c.job || c.job_role || 'N/A';
+        html +=
+          '<div class="list-item">' +
+            '<div class="list-item-left">' +
+              '<div class="list-item-name">' + nameText + '</div>' +
+              '<div class="list-item-sub">' + jobText + '</div>' +
+            '</div>' +
+            '<button class="btn-remove-item" onclick="removeFromList(' + i + ', this)">✕</button>' +
+          '</div>';
+      }
+      body.innerHTML = html;
+    }
+
+    // ========== 🔥 UPDATED: removeFromList ==========
+    function removeFromList(index, btnElement) {
+      var cv = selectedCVs[index];
+      if (!cv) {
+        showToast("CV not found!", true);
+        return;
+      }
+
+      var cvName = cv.name || cv.candidate_name || 'Unnamed Candidate';
+
+      if (!confirm("⚠️ Are you sure you want to permanently delete this CV from Supabase?\n\nDatabase record + ALL uploaded files (CV, Photo) will be deleted.\n\n" + cvName)) {
+        return;
+      }
+
+      if (btnElement) {
+        btnElement.classList.add('deleting');
+        btnElement.innerText = '⏳';
+        btnElement.disabled = true;
+      }
+
+      deleteCVComplete(cv, index, btnElement);
+    }
+
+    function clearAllList() {
+      if (selectedCVs.length === 0) return;
+      
+      if (!confirm("⚠️ Are you sure you want to clear all added CVs?\n\nThis will NOT delete them from Supabase. It will only remove them from your selection list.")) {
+        return;
+      }
+      
+      selectedCVs = [];
+      renderListModal();
+      updateListBadge();
+      updateDeleteMainCount();
+      var allAddBtns = document.querySelectorAll(".btn-add-top");
+      for (var j = 0; j < allAddBtns.length; j++) {
+        allAddBtns[j].className = "btn-add-top";
+        allAddBtns[j].innerText = "+ Add";
+      }
+    }
+
+    // ========== PHONE AUTO-FILL 974 ==========
+    function handlePhoneFocus() {
+      var input = document.getElementById('phoneInput');
+      if (input.value === '') {
+        input.value = '974';
+      }
+      input.setSelectionRange(input.value.length, input.value.length);
+    }
+
+    function handlePhoneInput() {
+      var input = document.getElementById('phoneInput');
+      var numbers = input.value.replace(/[^0-9]/g, '');
+      if (numbers.length < 3) {
+        input.value = '974';
+      } else {
+        var rest = numbers.substring(3);
+        input.value = '974' + rest;
+      }
+    }
+
+    // ========== SEND CVs TO BACKEND ==========
+    function sendCVsToBackend(phoneNumber, cvIds) {
+      return new Promise(function(resolve, reject) {
+        var backendUrl = 'https://zod-cv-backend.onrender.com/send-cvs';
+
+        fetch(backendUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            cvIds: cvIds,
+            phoneNumber: phoneNumber
+          })
+        })
+        .then(function(response) {
+          if (!response.ok) {
+            return response.json().then(function(err) {
+              reject(new Error(err.detail || err.error || 'Server error (Status: ' + response.status + ')'));
+            });
+          }
+          return response.json();
+        })
+        .then(function(data) {
+          resolve(data);
+        })
+        .catch(function(error) {
+          reject(error);
+        });
+      });
+    }
+
+    function submitPhone() {
+      var phone = document.getElementById("phoneInput").value.trim();
+      if (phone === "") {
+        showToast("Please enter a phone number.", true);
+        return;
+      }
+
+      if (selectedCVs.length === 0) {
+        showToast("No CVs selected to send.", true);
+        return;
+      }
+
+      var btn = document.querySelector('.btn-submit-phone');
+      var originalText = btn.innerText;
+      btn.innerText = "⏳ Sending...";
+      btn.disabled = true;
+
+      var cvIds = selectedCVs.map(function(c) { return c.id; });
+      var phoneNumber = phone.replace(/[^0-9]/g, '');
+
+      var progressContainer = document.getElementById('progressContainer');
+      var progressFill = document.getElementById('progressBarFill');
+      var progressStatus = document.getElementById('progressStatus');
+      var progressPercentage = document.getElementById('progressPercentage');
+      
+      progressContainer.classList.add('active');
+      progressFill.style.width = '0%';
+      progressStatus.textContent = 'Initializing...';
+      progressPercentage.textContent = '0%';
+
+      sendCVsToBackend(phoneNumber, cvIds)
+        .then(function(data) {
+          if (data.task_id) {
+            listenToProgress(data.task_id);
+          } else {
+            showToast("✅ " + data.message, false);
+            resetUI();
+          }
+        })
+        .catch(function(error) {
+          console.error('Error:', error);
+          showToast("❌ " + error.message, true);
+          resetUI();
+        });
+    }
+
+    function listenToProgress(taskId) {
+      var eventSource = new EventSource('https://zod-cv-backend.onrender.com/progress/' + taskId);
+      
+      eventSource.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        var progress = data.progress || 0;
+        var status = data.status || 'Processing...';
+        var error = data.error || false;
+        var success = data.success || false;
+
+        var progressFill = document.getElementById('progressBarFill');
+        var progressStatus = document.getElementById('progressStatus');
+        var progressPercentage = document.getElementById('progressPercentage');
+
+        progressFill.style.width = progress + '%';
+        progressStatus.textContent = status;
+        progressPercentage.textContent = progress + '%';
+
+        if (progress >= 100 || error || success) {
+          eventSource.close();
+          if (success) {
+            showToast("✅ CVs sent successfully!", false);
+          } else if (error) {
+            showToast("❌ " + status, true);
+          }
+          resetUI();
+        }
+      };
+
+      eventSource.onerror = function() {
+        eventSource.close();
+        var progress = parseInt(document.getElementById('progressPercentage').textContent);
+        if (progress < 100) {
+          showToast("❌ Connection lost. Please check your internet.", true);
+          resetUI();
+        }
+      };
+    }
+
+    function resetUI() {
+      var btn = document.querySelector('.btn-submit-phone');
+      btn.innerText = "📤 Send Now";
+      btn.disabled = false;
+      
+      var progressContainer = document.getElementById('progressContainer');
+      progressContainer.classList.remove('active');
+      
+      var progressFill = document.getElementById('progressBarFill');
+      progressFill.style.width = '0%';
+      
+      var sheetData = {
+        phone: document.getElementById("phoneInput").value.trim(),
+        cvs: selectedCVs.map(function(c) {
+          return {
+            id: c.id,
+            name: c.name || c.candidate_name || "Unnamed",
+            cv: c.cv || c.cv_url || c.cvUrl || ""
+          };
+        }),
+        timestamp: new Date().toISOString()
+      };
+      sendToGoogleSheets(sheetData);
+      
+      selectedCVs = [];
+      updateListBadge();
+      updateDeleteMainCount();
+      
+      closePhoneModal();
+      if (document.getElementById("listModal").style.display === "flex") {
+        renderListModal();
+      }
+      
+      var allAddBtns = document.querySelectorAll(".btn-add-top");
+      for (var j = 0; j < allAddBtns.length; j++) {
+        allAddBtns[j].className = "btn-add-top";
+        allAddBtns[j].innerText = "+ Add";
+      }
+    }
+
+    function sendToGoogleSheets(data) {
+      var url = "https://script.google.com/macros/s/AKfycbxuvPgWbZR_m4Xg_uHpQ1RxQQQQ8kmJZAv6_5zRHLZwb8wWHnxXUvwm6OPH-M_bK8sqnA/exec";
+      fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }).then(function(res) {
+        console.log("Data sent to Google Sheets:", data);
+      }).catch(function(err) {
+        console.error("Error sending to Google Sheets:", err);
+      });
+    }
+
+    function openPhoneModal() {
+      if (selectedCVs.length === 0) {
+        showToast("Please add at least one CV to send.", true);
+        return;
+      }
+      document.getElementById("phoneInput").value = "";
+      document.getElementById("phoneSuccess").style.display = "none";
+      var progressContainer = document.getElementById('progressContainer');
+      progressContainer.classList.remove('active');
+      var modal = document.getElementById("phoneModal");
+      modal.style.display = "-webkit-flex";
+      modal.style.display = "flex";
+    }
+
+    function closePhoneModal() {
+      document.getElementById("phoneModal").style.display = "none";
+    }
+
+    // KEYBOARD
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        if (document.getElementById("phoneModal").style.display === "flex") closePhoneModal();
+        else if (document.getElementById("listModal").style.display === "flex") closeListModal();
+        else if (document.getElementById("cvModal").style.display === "flex") closeModal();
+      }
+    });
+
+    window.onload = checkAuth;
+  </script>
 </body>
 </html>
